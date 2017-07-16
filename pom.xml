@@ -48,7 +48,6 @@
         <version.jboss.bom>10.1.0.Final</version.jboss.bom>
 
         <!-- other plug-in versions -->
-        <version.surefire.plugin>2.10</version.surefire.plugin>
         <version.war.plugin>3.0.0</version.war.plugin>
 
         <!-- maven-compiler-plugin -->
@@ -187,6 +186,22 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.20</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <!-- Maven will append the version to the finalName (which is the name
             given to the generated WAR, and hence the context root) -->
         <finalName>${project.artifactId}</finalName>
@@ -206,6 +221,9 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>
             </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
@@ -222,10 +240,9 @@
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
+                        <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
-                            <skip>true</skip>
+                            <skipITs>true</skipITs>
                         </configuration>
                     </plugin>
                 </plugins>
