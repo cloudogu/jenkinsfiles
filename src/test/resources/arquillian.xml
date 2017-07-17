@@ -25,8 +25,6 @@
 <!--       <property name="deploymentExportPath">target/</property>  -->
 <!--    </engine> -->
 
-   <!-- Force the use of the Servlet 3.0 protocol with all containers, as it is the most mature -->
-   <defaultProtocol type="Servlet 3.0" />
 
      <!-- Example configuration for a remote WildFly instance -->
    <container qualifier="jboss" default="true">
@@ -34,6 +32,15 @@
         <!--<configuration> -->
         <!--<property name="jbossHome">/path/to/wildfly</property> -->
         <!--</configuration> -->
+
+       <!-- Force the use of the Servlet 3.0 protocol with jboss containers, as it is the most mature -->
+       <protocol type="Servlet 3.0"/>
    </container>
+
+    <container qualifier="wildFlySwarm">
+        <configuration>
+            <property name="javaVmArguments"></property>
+        </configuration>
+    </container>
 
 </arquillian>

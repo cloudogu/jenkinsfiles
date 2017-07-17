@@ -73,6 +73,18 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.wildfly.swarm</groupId>
+                <artifactId>bom</artifactId>
+                <version>2017.7.0</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.4.196</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -236,7 +248,7 @@
 
     <profiles>
         <profile>
-            <!-- The default profile skips all tests, though you can tune it to run
+            <!-- The default profile skips all integration tests, though you can tune it to run
                 just unit tests based on a custom pattern -->
             <!-- Separate profiles are provided for running all tests, including Arquillian
                 tests that execute in the specified container -->
@@ -281,6 +293,30 @@
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <!-- An optional Arquillian testing profile that executes tests in your
+                    WildFly Swarm instance -->
+            <!-- This profile will start a new WildFly Swarm instance, and execute the
+                test, shutting it down when done -->
+            <!-- Run with: mvn clean test -Parq-wildfly-swarm -->
+            <id>arq-wildfly-swarm</id>
+            <properties>
+                <arquillian.container>wildFlySwarm</arquillian.container>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.swarm</groupId>
+                    <artifactId>arquillian</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
