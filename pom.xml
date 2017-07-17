@@ -50,10 +50,12 @@
 
         <!-- other plug-in versions -->
         <version.war.plugin>3.0.0</version.war.plugin>
+        <version.wildfly.swarm>2017.7.0</version.wildfly.swarm>
 
         <!-- maven-compiler-plugin -->
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+
     </properties>
 
     <dependencyManagement>
@@ -76,7 +78,7 @@
             <dependency>
                 <groupId>org.wildfly.swarm</groupId>
                 <artifactId>bom</artifactId>
-                <version>2017.7.0</version>
+                <version>${version.wildfly.swarm}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -317,9 +319,25 @@
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
-                    <scope>test</scope>
                 </dependency>
             </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Create a self-contained jar, containing the account-backend -->
+                        <groupId>org.wildfly.swarm</groupId>
+                        <artifactId>wildfly-swarm-plugin</artifactId>
+                        <version>${version.wildfly.swarm}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>package</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <profile>
