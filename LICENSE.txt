@@ -1,8 +1,13 @@
 ====
-    JBoss, Home of Professional Open Source
-    Copyright 2015, Red Hat, Inc. and/or its affiliates, and individual
-    contributors by the @authors tag. See the copyright.txt in the
-    distribution for a full listing of individual contributors.
+    Copyright for portions of this project are held by Red Hat, Inc. and/or its 
+    affiliates, and individual contributors by the @authors tag, 2016 as part 
+    of project wildfly/quickstart. 
+    
+    All other copyright for project triologygmbh/jenkinsfile are held by 
+    Triology GmbH, 2017.
+    
+    See the copyright.txt in the distribution for a full listing of individual 
+    contributors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
