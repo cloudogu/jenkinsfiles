@@ -56,6 +56,10 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
 
+        <!-- Possibility to skip only the unit test. Can be useful when running only integration tests.
+            This can be used from the command line as follows: mvn <goals> -DskipUnitTests -->
+        <skipUnitTests>${skipTests}</skipUnitTests>
+
     </properties>
 
     <dependencyManagement>
@@ -227,6 +231,15 @@
             given to the generated WAR, and hence the context root) -->
         <finalName>${project.artifactId}</finalName>
         <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <!-- skips surefire tests without skipping failsafe tests.
+                             Property value seems to magically default to false -->
+                    <skipTests>${skipUnitTests}</skipTests>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${version.war.plugin}</version>
