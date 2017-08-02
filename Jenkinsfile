@@ -4,7 +4,15 @@ node {
     }
 
     stage('Build') {
-        mvn 'package'
+        mvn 'clean install -DskipTests'
+    }
+
+    stage('Unit Test') {
+        mvn 'test'
+    }
+
+    stage('Integration Test') {
+        mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
     }
 }
 
