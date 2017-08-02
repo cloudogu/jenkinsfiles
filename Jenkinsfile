@@ -10,6 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 mvn 'clean install -DskipTests'
+                archive '**/target/*.*ar'
             }
         }
 
