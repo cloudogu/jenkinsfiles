@@ -1,4 +1,10 @@
 node {
+    properties([
+            disableConcurrentBuilds(),
+            buildDiscarder(logRotator(numToKeepStr: '10'))
+    ])
+
+
     catchError {
 
         stage('Checkout') {
@@ -7,6 +13,7 @@ node {
 
         stage('Build') {
             mvn 'clean install -DskipTests'
+
         }
 
         stage('Unit Test') {
