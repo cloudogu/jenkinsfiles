@@ -39,7 +39,11 @@
 
     <container qualifier="wildFlySwarm">
         <configuration>
-            <property name="javaVmArguments"></property>
+            <!-- Use non-default port for WildFly swarm instances started by arquillian,
+                 in order not to interfere with development instance.
+                 Port can be changed by passing e.g "-Darquillian.swarm.http.port=54321" to maven
+              -->
+            <property name="javaVmArguments">-Dswarm.http.port=${arquillian.swarm.http.port:8081}</property>
         </configuration>
     </container>
 
