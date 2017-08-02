@@ -20,20 +20,24 @@ pipeline {
             }
         }
     }
-
     post {
         always {
             // Archive Unit and integration test results, if any
             junit allowEmptyResults: true,
                     testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/*.xml'
-        }
-
-        changed {
-            mail to: "${env.EMAIL_RECIPIENTS}",
-                 subject: "${JOB_NAME} - Build #${BUILD_NUMBER} - ${currentBuild.currentResult}!",
-                 body: "Check console output at ${BUILD_URL} to view the results."
+            mailIfStatusChanged env.EMAIL_RECIPIENTS
         }
     }
+}
+
+def mailIfStatusChanged(String recipients) {
+    // Also send "back to normal" emails. Mailer seems to check build result, but SUCCESS is not set at this point.
+    script {
+        if (currentBuild.currentResult == 'SUCCESS') {
+            currentBuild.result = 'SUCCESS'
+        }
+    }
+    step([$class: 'Mailer', recipients: recipients])
 }
 
 def mvn(def args) {
