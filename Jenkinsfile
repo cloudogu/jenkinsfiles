@@ -4,7 +4,20 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                mvn 'package'
+                mvn 'clean install -DskipTests'
+            }
+        }
+
+        stage('Unit Test') {
+            steps {
+                mvn 'test'
+
+            }
+        }
+
+        stage('Integration Test') {
+            steps {
+                mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
             }
         }
     }
