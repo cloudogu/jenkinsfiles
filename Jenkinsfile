@@ -27,10 +27,8 @@ node {
 
 def mailIfStatusChanged(String recipients) {
     // Also send "back to normal" emails. Mailer seems to check build result, but SUCCESS is not set at this point.
-    script {
-        if (currentBuild.currentResult == 'SUCCESS') {
-            currentBuild.result = 'SUCCESS'
-        }
+    if (currentBuild.currentResult == 'SUCCESS') {
+        currentBuild.result = 'SUCCESS'
     }
     step([$class: 'Mailer', recipients: recipients])
 }
