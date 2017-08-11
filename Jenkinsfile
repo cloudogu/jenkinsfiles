@@ -13,7 +13,7 @@ node {
 
         stage('Build') {
             mvn 'clean install -DskipTests'
-            archive '**/target/*.*ar'
+            archiveArtifacts '**/target/*.*ar'
         }
 
         stage('Unit Test') {
