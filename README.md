@@ -5,7 +5,9 @@ This project contains examples for the [Jenkins pipeline plugin](https://jenkins
 The project being built by the pipeline examples is [wildfly/quickstart/kitchensink](https://github.com/wildfly/quickstart/tree/cfd2e05d16e4ae788bc12486f5b30d668b921973/kitchensink), a typical JEE web app basing on CDI, JSF, JPA, EJB, JAX-RS and integration tests with arquillian.
 It was extended slightly to allow for running integration tests using WildFly Swarm. 
 
-The pipeline examples are built on top of each other, each in declarative and scripted syntax, respectively. Each example is put on a separate [branche](https://github.com/triologygmbh/jenkinsfile/branches) for convenient access:
+The pipeline examples are built on top of each other, each in declarative and scripted syntax, respectively. Each example is put on a separate [branches](https://github.com/triologygmbh/jenkinsfile/branches) for convenient access.
+
+Please see [our Jenkins Instance](https://opensource.triology.de/jenkins/blue/organizations/jenkins/triologygmbh-github%2Fjenkinsfile/branches) for build results.
 
 The following aspects are covered by the examples:
 
