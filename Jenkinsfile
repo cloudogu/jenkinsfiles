@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    triggers {
+        // Use @nightly for nightly build. As this is only an example, we run less frequent :-)
+        cron('@yearly')
+    }
+
     options {
         disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '10'))
