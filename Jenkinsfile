@@ -14,18 +14,22 @@ pipeline {
             }
         }
 
-        stage('Unit Test') {
-            steps {
-                mvn 'test'
-            }
-        }
-
-        stage('Integration Test') {
-            steps {
-                mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+        stage('Tests') {
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                        mvn 'test'
+                    }
+                }
+                stage('Integration Test') {
+                    steps {
+                        mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                    }
+                }
             }
         }
     }
+
     post {
         always {
             // Archive Unit and integration test results, if any
