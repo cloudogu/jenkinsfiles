@@ -1,5 +1,7 @@
 node {
     properties([
+            // Use @nightly for nightly build. As this is only an example, we run less frequent :-)
+            pipelineTriggers([cron('@yearly')]),
             disableConcurrentBuilds(),
             buildDiscarder(logRotator(numToKeepStr: '10'))
     ])
