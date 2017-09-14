@@ -16,13 +16,18 @@ node {
             archiveArtifacts '**/target/*.*ar'
         }
 
-        stage('Unit Test') {
-            mvn 'test'
-        }
-
-        stage('Integration Test') {
-            mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
-        }
+        parallel(
+                unitTest: {
+                    stage('Unit Test') {
+                        mvn 'test'
+                    }
+                },
+                integrationTest: {
+                    stage('Integration Test') {
+                        mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                    }
+                }
+        )
     }
 
     // Archive Unit and integration test results, if any
