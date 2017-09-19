@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    triggers {
-        // Use @nightly for nightly build. As this is only an example, we run less frequent :-)
-        cron('@yearly')
-    }
-
     options {
         disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -14,6 +9,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                createPipelineTriggers()
                 mvn 'clean install -DskipTests'
                 archiveArtifacts '**/target/*.*ar'
             }
@@ -31,6 +27,7 @@ pipeline {
                     }
                 }
                 stage('Integration Test') {
+                    when { expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 0..3 } }
                     steps {
                         mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                     }
@@ -46,6 +43,19 @@ pipeline {
                     testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/*.xml'
             mailIfStatusChanged env.EMAIL_RECIPIENTS
         }
+    }
+}
+
+void createPipelineTriggers() {
+    script {
+        def triggers = []
+        if (env.BRANCH_NAME == 'master') {
+            // Run a nightly only for master
+            triggers = [cron('H H(0-3) * * 1-5')]
+        }
+        properties([
+                pipelineTriggers(triggers)
+        ])
     }
 }
 
