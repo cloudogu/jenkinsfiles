@@ -17,3 +17,5 @@ The following aspects are covered by the examples:
 4. a End of pipeline run and handling failures ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/4a-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/4a-scripted/Jenkinsfile))  
    b Simplified Mailing ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/4b-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/4b-scripted/Jenkinsfile))
 5. Archive and Properties/Options ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/5-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/5-scripted/Jenkinsfile))
+6. Parallel ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/6-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/6-scripted/Jenkinsfile))
+7. Time Triggered Builds (e.g. nightly) ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/7-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/7-scripted/Jenkinsfile))
