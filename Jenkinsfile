@@ -1,11 +1,13 @@
+// Query outside of node, in order to get pending script approvals
+boolean isTimeTriggered = isTimeTriggeredBuild()
+
 node {
+
     properties([
-            // Use @nightly for nightly build. As this is only an example, we run less frequent :-)
-            pipelineTriggers([cron('@yearly')]),
+            pipelineTriggers(createPipelineTriggers()),
             disableConcurrentBuilds(),
             buildDiscarder(logRotator(numToKeepStr: '10'))
     ])
-
 
     catchError {
 
@@ -26,7 +28,10 @@ node {
                 },
                 integrationTest: {
                     stage('Integration Test') {
-                        mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                        // Use isNightly() to avoid script approvals
+                        if (isTimeTriggered) {
+                            mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                        }
                     }
                 }
         )
@@ -37,6 +42,40 @@ node {
             testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/*.xml'
 
     mailIfStatusChanged env.EMAIL_RECIPIENTS
+}
+
+def createPipelineTriggers() {
+    if (env.BRANCH_NAME == 'master') {
+        // Run a nightly only for master
+        return [cron('H H(0-3) * * 1-5')]
+    }
+    return []
+}
+
+/**
+ * @return {@code true} if this build runs between midnight an 3am (within the timezone configured on the Jenkins server).
+ */
+boolean isNightly() {
+    return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 0..3
+}
+
+/**
+ * Note that this requires the following script approvals by your jenkins administrator
+ * (via https://JENKINS-URL/scriptApproval/):
+ * <br/>
+ * {@code method hudson.model.Run getCauses}
+ * {@code method org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper getRawBuild}.
+ * <br/><br/>
+ * Note that that the pending script approvals only appear if this method is called <b>outside a {@code node}</b>
+ * within the pipeline!
+ *
+ * @return {@code true} if the build was time triggered, otherwise {@code false}
+ */
+boolean isTimeTriggeredBuild() {
+    for (Object currentBuildCause : currentBuild.rawBuild.getCauses()) {
+        return currentBuildCause.class.getName().contains('TimerTriggerCause')
+    }
+    return false
 }
 
 def mailIfStatusChanged(String recipients) {
