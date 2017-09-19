@@ -1,5 +1,5 @@
 // Query outside of node, in order to get pending script approvals
-boolean isTimeTriggered = isTimeTriggeredBuild()
+//boolean isTimeTriggered = isTimeTriggeredBuild()
 
 node {
 
@@ -28,8 +28,7 @@ node {
                 },
                 integrationTest: {
                     stage('Integration Test') {
-                        // Use isNightly() to avoid script approvals
-                        if (isTimeTriggered) {
+                        if (isNightly()) {
                             mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                         }
                     }
@@ -53,6 +52,8 @@ def createPipelineTriggers() {
 }
 
 /**
+ * Determines if nightly build by hour of day to avoid script approval, as need in {@link #isTimeTriggeredBuild()}.
+ *
  * @return {@code true} if this build runs between midnight an 3am (within the timezone configured on the Jenkins server).
  */
 boolean isNightly() {
