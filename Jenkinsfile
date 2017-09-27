@@ -15,12 +15,8 @@ pipeline {
             }
         }
 
-        // Parallel stages will only be available with declarative pipelines version 1.2
-        // https://github.com/jenkinsci/pipeline-model-definition-plugin/blob/103bec1aeb93f537477c68d2e9222ad97588d2d6/rfc/JENKINS-41334-parallel-stage-execution.md
-        // https://issues.jenkins-ci.org/browse/JENKINS-41334
-
-        //stage('Tests') {
-        //    parallel {
+        stage('Tests') {
+            parallel {
                 stage('Unit Test') {
                     steps {
                         mvn 'test'
@@ -31,8 +27,8 @@ pipeline {
                     steps {
                         mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                     }
-        //        }
-        //    }
+                }
+            }
         }
     }
 
