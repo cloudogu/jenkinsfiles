@@ -1,0 +1,9 @@
+<p>
+Provides the functionality of the Jenkins Post-build Action "E-mail Notification" known from freestyle projects.
+That is, it sends an email when the build status is `FAILED`, and (after failed builds) when the build is back to normal.
+</p>
+<dl>
+  <dt>`mailIfStatusChanged('a@b.cd,123@xy.z')`</dt>
+  <dd>
+    Sends the email (if necessary) to the string passed. Expects a comma-separated list of email addresses.
+</dl>
