@@ -1,4 +1,4 @@
-@Library('github.com/triologygmbh/jenkinsfile@8-shared-library') _
+@Library('github.com/triologygmbh/jenkinsfile@41e28d9') _
 
 // Query outside of node, in order to get pending script approvals
 //boolean isTimeTriggered = isTimeTriggeredBuild()
