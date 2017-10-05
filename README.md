@@ -19,3 +19,4 @@ The following aspects are covered by the examples:
 5. Archive and Properties/Options ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/5-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/5-scripted/Jenkinsfile))
 6. Parallel ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/6-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/6-scripted/Jenkinsfile))
 7. Time Triggered Builds (e.g. nightly) ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/7-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/7-scripted/Jenkinsfile))
+8. Shared libraries ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/8-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/8-scripted/Jenkinsfile) | [shared library](https://github.com/triologygmbh/jenkinsfile/tree/8-shared-library))
