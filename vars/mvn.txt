@@ -1,0 +1,12 @@
+<p>
+Provides a <code>mvn</code> step.
+Note that it relies on two Jenkins tools installed on the executing Jenkins Instance
+<ul>
+    <li>A Maven instance called <code>M3</code></li>
+    <li>A Java instance called <code>JDK8</code></li>
+</p>
+<dl>
+  <dt>`mvn 'clean install'`</dt>
+  <dd>
+    Executes the maven parameters passed as string. In this case executes the <code>clean</code> and <code>install</code> phase.
+</dl>
