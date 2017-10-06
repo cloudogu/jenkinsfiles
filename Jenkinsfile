@@ -1,4 +1,4 @@
-@Library('github.com/triologygmbh/jenkinsfile@41e28d9') _
+@Library('github.com/triologygmbh/jenkinsfile@e00bbf0') _
 
 // Query outside of node, in order to get pending script approvals
 //boolean isTimeTriggered = isTimeTriggeredBuild()
@@ -51,15 +51,6 @@ def createPipelineTriggers() {
         return [cron('H H(0-3) * * 1-5')]
     }
     return []
-}
-
-/**
- * Determines if nightly build by hour of day to avoid script approval, as need in {@link #isTimeTriggeredBuild()}.
- *
- * @return {@code true} if this build runs between midnight an 3am (within the timezone configured on the Jenkins server).
- */
-boolean isNightly() {
-    return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 0..3
 }
 
 /**
