@@ -1,0 +1,9 @@
+<p>
+Determines if nightly build by hour of day to avoid script approval, as need when getting build cause via currentBuild.rawBuild.
+Will be obsolete when this is fixed: https://issues.jenkins-ci.org/browse/JENKINS-41272
+</p>
+<dl>
+  <dt>`isNightly()`</dt>
+  <dd>
+    Returns true if this build runs between midnight an 3am (within the timezone configured on the Jenkins server).
+</dl>
