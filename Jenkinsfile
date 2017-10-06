@@ -1,4 +1,4 @@
-@Library('github.com/triologygmbh/jenkinsfile@41e28d9') _
+@Library('github.com/triologygmbh/jenkinsfile@e00bbf0') _
 
 pipeline {
     agent any
@@ -25,7 +25,7 @@ pipeline {
                     }
                 }
                 stage('Integration Test') {
-                    when { expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 0..3 } }
+                    when { expression { return isNightly() } }
                     steps {
                         mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                     }
