@@ -1,9 +1,9 @@
-@Library('github.com/triologygmbh/jenkinsfile@e00bbf0') _
+@Library('github.com/triologygmbh/jenkinsfile@4c739f9') _
 
 // Query outside of node, in order to get pending script approvals
 //boolean isTimeTriggered = isTimeTriggeredBuild()
 
-node('docker') { // Require a build executor with docker (label)
+node('docker') {
 
     properties([
             pipelineTriggers(createPipelineTriggers()),
@@ -11,34 +11,31 @@ node('docker') { // Require a build executor with docker (label)
             buildDiscarder(logRotator(numToKeepStr: '10'))
     ])
 
-    docker.image('maven:3.5.0-jdk-8').inside {
+    catchError {
 
-        catchError {
+        stage('Checkout') {
+            checkout scm
+        }
 
-            stage('Checkout') {
-                checkout scm
-            }
+        stage('Build') {
+            mvn 'clean install -DskipTests'
+            archiveArtifacts '**/target/*.*ar'
+        }
 
-            stage('Build') {
-                sh 'mvn clean install -DskipTests'
-                archiveArtifacts '**/target/*.*ar'
-            }
-
-            parallel(
-                    unitTest: {
-                        stage('Unit Test') {
-                            sh 'mvn test'
-                        }
-                    },
-                    integrationTest: {
-                        stage('Integration Test') {
-                            if (isNightly()) {
-                                sh 'mvn verify -DskipUnitTests -Parq-wildfly-swarm '
-                            }
+        parallel(
+                unitTest: {
+                    stage('Unit Test') {
+                        mvn 'test'
+                    }
+                },
+                integrationTest: {
+                    stage('Integration Test') {
+                        if (isNightly()) {
+                            mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                         }
                     }
-            )
-        }
+                }
+        )
     }
 
     // Archive Unit and integration test results, if any
