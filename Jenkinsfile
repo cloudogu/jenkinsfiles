@@ -1,4 +1,4 @@
-@Library('github.com/triologygmbh/jenkinsfile@9-shared-library') _
+@Library('github.com/triologygmbh/jenkinsfile@9b-shared-library') _
 
 node('docker') {
     catchError {
