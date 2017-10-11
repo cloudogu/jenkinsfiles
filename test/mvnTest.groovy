@@ -14,24 +14,25 @@ class MvnTest extends BasePipelineTest {
 
     @Test
     void mvn() {
+        def imageParams = ""
         def shParams = ""
-        def withEnvParams = []
         helper.registerAllowedMethod("sh", [String.class], { paramString -> shParams = paramString })
-        helper.registerAllowedMethod("withEnv", [List.class, Closure.class], { paramList, closure ->
-            withEnvParams = paramList
-            closure.call()
-            })
 
         def script = loadScript('vars/mvn.groovy')
-        script.env = new Object() {
-            String JAVA_HOME = "javaHome"
+        script.docker = new Object() {
+            def image(String imgName) {
+                imageParams = imgName
+                return new Object() {
+                    def inside(Closure closure) {
+                        closure.call()
+                    }
+                }
+            }
         }
+
         script.call('clean install')
 
+        assert imageParams == 'maven:3.5.0-jdk-8'
         assert shParams.contains('clean install')
-        assert withEnvParams.size() == 2
-        assert withEnvParams[0].contains('JDK8')
-        assert withEnvParams[1].contains('M3')
-        assert withEnvParams[1].contains('javaHome')
     }
 }

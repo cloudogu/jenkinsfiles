@@ -1,6 +1,4 @@
 def call(def args) {
-    def mvnHome = tool 'M3'
-    def javaHome = tool 'JDK8'
 
     // Apache Maven related side notes:
     // --batch-mode : recommended in CI to inform maven to not run in interactive mode (less logs)
@@ -9,11 +7,9 @@ def call(def args) {
     // -U : force maven to update snapshots each time (default : once an hour, makes no sense in CI).
     // -Dsurefire.useFile=false : useful in CI. Displays test errors in the logs directly (instead of
     //                            having to crawl the workspace files to see the cause).
-
-    // Advice: don't define M2_HOME in general. Maven will autodetect its root fine.
-    // See also
     // https://github.com/jenkinsci/pipeline-examples/blob/master/pipeline-examples/maven-and-jdk-specific-version/mavenAndJdkSpecificVersion.groovy
-    withEnv(["JAVA_HOME=${javaHome}", "PATH+MAVEN=${mvnHome}/bin:${env.JAVA_HOME}/bin"]) {
-        sh "${mvnHome}/bin/mvn ${args} --batch-mode -V -U -e -Dsurefire.useFile=false"
+
+    docker.image('maven:3.5.0-jdk-8').inside {
+        sh "mvn ${args} --batch-mode -V -U -e -Dsurefire.useFile=false"
     }
 }
