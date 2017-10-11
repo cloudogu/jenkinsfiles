@@ -1,10 +1,7 @@
 <p>
 Provides a <code>mvn</code> step.
-Note that it relies on two Jenkins tools installed on the executing Jenkins Instance
-<ul>
-    <li>A Maven instance called <code>M3</code></li>
-    <li>A Java instance called <code>JDK8</code></li>
-</p>
+Note that it relies on docker being installed on the build executor (docker executable on the PATH).
+Bases on the maven:3.5.0-jdk-8 docker image.
 <dl>
   <dt>`mvn 'clean install'`</dt>
   <dd>
