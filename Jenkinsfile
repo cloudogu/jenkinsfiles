@@ -1,12 +1,7 @@
-@Library('github.com/triologygmbh/jenkinsfile@e00bbf0') _
+@Library('github.com/triologygmbh/jenkinsfile@4c739f9') _
 
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.5.0-jdk-8'
-            label 'docker' // Require a build executor with docker
-        }
-    }
+    agent { label 'docker' }
 
     options {
         disableConcurrentBuilds()
@@ -17,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 createPipelineTriggers()
-                sh 'mvn clean install -DskipTests'
+                mvn 'clean install -DskipTests'
                 archiveArtifacts '**/target/*.*ar'
             }
         }
@@ -26,13 +21,13 @@ pipeline {
             parallel {
                 stage('Unit Test') {
                     steps {
-                        sh 'mvn test'
+                        mvn 'test'
                     }
                 }
                 stage('Integration Test') {
                     when { expression { return isNightly() } }
                     steps {
-                        sh 'mvn verify -DskipUnitTests -Parq-wildfly-swarm '
+                        mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                     }
                 }
             }
