@@ -11,8 +11,7 @@ node('docker') { // Require a build executor with docker (label)
             buildDiscarder(logRotator(numToKeepStr: '10'))
     ])
 
-    docker.image('maven:3.5.0-jdk-8')
-            .inside('-v $HOME/.m2:/root/.m2') { // Use Jenkin's maven repo in docker container for performance reasons
+    docker.image('maven:3.5.0-jdk-8').inside {
 
         catchError {
 
