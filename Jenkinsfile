@@ -3,7 +3,7 @@
 // Query outside of node, in order to get pending script approvals
 //boolean isTimeTriggered = isTimeTriggeredBuild()
 
-node {
+node('docker') { // Require a build executor with docker (label)
 
     properties([
             pipelineTriggers(createPipelineTriggers()),
@@ -11,31 +11,35 @@ node {
             buildDiscarder(logRotator(numToKeepStr: '10'))
     ])
 
-    catchError {
+    docker.image('maven:3.5.0-jdk-8')
+            .inside('-v $HOME/.m2:/root/.m2') { // Use Jenkin's maven repo in docker container for performance reasons
 
-        stage('Checkout') {
-            checkout scm
-        }
+        catchError {
 
-        stage('Build') {
-            mvn 'clean install -DskipTests'
-            archiveArtifacts '**/target/*.*ar'
-        }
+            stage('Checkout') {
+                checkout scm
+            }
 
-        parallel(
-                unitTest: {
-                    stage('Unit Test') {
-                        mvn 'test'
-                    }
-                },
-                integrationTest: {
-                    stage('Integration Test') {
-                        if (isNightly()) {
-                            mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+            stage('Build') {
+                sh 'mvn clean install -DskipTests'
+                archiveArtifacts '**/target/*.*ar'
+            }
+
+            parallel(
+                    unitTest: {
+                        stage('Unit Test') {
+                            sh 'mvn test'
+                        }
+                    },
+                    integrationTest: {
+                        stage('Integration Test') {
+                            if (isNightly()) {
+                                sh 'mvn verify -DskipUnitTests -Parq-wildfly-swarm '
+                            }
                         }
                     }
-                }
-        )
+            )
+        }
     }
 
     // Archive Unit and integration test results, if any
