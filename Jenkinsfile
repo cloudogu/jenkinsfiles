@@ -4,7 +4,6 @@ pipeline {
     agent {
         docker {
             image 'maven:3.5.0-jdk-8'
-            args '-v $HOME/.m2:/root/.m2' // Use Jenkin's maven repo in docker container for performance reasons
             label 'docker' // Require a build executor with docker
         }
     }
