@@ -3,7 +3,7 @@
 // Query outside of node, in order to get pending script approvals
 //boolean isTimeTriggered = isTimeTriggeredBuild()
 
-node('docker') {
+node('docker') { // Require a build executor with docker (label)
 
     properties([
             pipelineTriggers(createPipelineTriggers()),
