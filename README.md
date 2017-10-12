@@ -20,3 +20,6 @@ The following aspects are covered by the examples:
 6. Parallel ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/6-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/6-scripted/Jenkinsfile))
 7. Time Triggered Builds (e.g. nightly) ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/7-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/7-scripted/Jenkinsfile))
 8. Shared libraries ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/8-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/8-scripted/Jenkinsfile) | [shared library](https://github.com/triologygmbh/jenkinsfile/tree/8-shared-library))
+9. Docker  
+   a Run whole pipeline inside a Docker container ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/9a-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/9a-scripted/Jenkinsfile))  
+   b Using Docker inside a custom step (implemented in shared library) ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/9b-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/9b-scripted/Jenkinsfile) | [shared library](https://github.com/triologygmbh/jenkinsfile/tree/9b-shared-library))
