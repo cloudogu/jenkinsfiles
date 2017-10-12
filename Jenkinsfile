@@ -1,7 +1,7 @@
 @Library('github.com/triologygmbh/jenkinsfile@4c739f9') _
 
 pipeline {
-    agent { label 'docker' }
+    agent { label 'docker' } // Require a build executor with docker
 
     options {
         disableConcurrentBuilds()
