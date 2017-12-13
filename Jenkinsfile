@@ -1,4 +1,4 @@
-@Library('github.com/triologygmbh/jenkinsfile@4c739f9') _
+@Library('github.com/triologygmbh/jenkinsfile@f38945a') _
 
 pipeline {
     agent { label 'docker' } // Require a build executor with docker
