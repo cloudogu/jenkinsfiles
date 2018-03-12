@@ -5,9 +5,9 @@
 // Query outside of node, in order to get pending script approvals
 //boolean isTimeTriggered = isTimeTriggeredBuild()
 
-catchError {
+node('docker') { // Require a build executor with docker (label)
 
-    node('docker') { // Require a build executor with docker (label)
+    catchError {
 
         properties([
                 pipelineTriggers(createPipelineTriggers()),
@@ -42,24 +42,17 @@ catchError {
         stage('Statical Code Analysis') {
             withSonarQubeEnv('sonarcloud.io') {
                 mvn "$SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN " +
-                        // Additionally needed for sonarcloud.io (EXTRA_PROPS would be the place to configure sonar.organization)
+                        // Here, we could define e.g. sonar.organization, needed for sonarcloud.io
                         "$SONAR_EXTRA_PROPS " +
                         // Addionally needed when using the branch plugin (e.g. on sonarcloud.io)
                         "-Dsonar.branch.name=$BRANCH_NAME -Dsonar.branch.target=master"
             }
-        }
-    }
-}
 
-node {
-
-    stage('Quality Gate') {
-        if (currentBuild.currentResult == 'SUCCESS') {
             timeout(time: 2, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                     echo "Pipeline unstable due to quality gate failure: ${qg.status}"
-                    currentBuild.result ='UNSTABLE'
+                    currentBuild.result = 'UNSTABLE'
                 }
             }
         }
