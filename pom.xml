@@ -349,6 +349,12 @@
                         <groupId>org.wildfly.swarm</groupId>
                         <artifactId>wildfly-swarm-plugin</artifactId>
                         <version>${version.wildfly.swarm}</version>
+                        <configuration>
+                            <properties>
+                                <!-- Work around "SocketException: Protocol family unavailable" when starting wildFly swarm-->
+                                <java.net.preferIPv4Stack>true</java.net.preferIPv4Stack>
+                            </properties>
+                        </configuration>
                         <executions>
                             <execution>
                                 <goals>
