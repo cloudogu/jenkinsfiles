@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kitchensink
+  name: kitchensink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kitchensink
+  template:
+    metadata:
+      labels:
+        app: kitchensink
+      annotations:
+        kubernetes.io/change-cause: $IMAGE_NAME
+    spec:
+      containers:
+      - image: $IMAGE_NAME
+        name: kitchensink
+        resources:
+          requests:
+            memory: 512M
+            cpu: 500m
+        readinessProbe:
+          httpGet:
+            path: /rest/version
+            port: 8080
+        livenessProbe:
+          httpGet:
+            path: /rest/version
+            port: 8080
+        env:
+        - name: JAVA_OPTS
+          value: -Xmx512M

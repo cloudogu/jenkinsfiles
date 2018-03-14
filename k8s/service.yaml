@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kitchensink
+spec:
+  selector:
+    app: kitchensink
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
