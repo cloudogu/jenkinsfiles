@@ -27,17 +27,24 @@ catchError {
         parallel(
                 unitTest: {
                     stage('Unit Test') {
-                        mvn 'test'
+                        catchError {
+                            mvn 'test'
+                        }
+                        junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml'
                     }
                 },
                 integrationTest: {
                     stage('Integration Test') {
                         if (isNightly()) {
-                            mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                            catchError {
+                                mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                            }
+                            junit allowEmptyResults: true, testResults: '**/target/failsafe-reports/*.xml'
                         }
                     }
                 }
         )
+
 
         stage('Statical Code Analysis') {
             withSonarQubeEnv('sonarcloud.io') {
@@ -49,9 +56,6 @@ catchError {
             }
         }
     }
-}
-
-node {
 
     stage('Quality Gate') {
         if (currentBuild.currentResult == 'SUCCESS') {
@@ -59,16 +63,14 @@ node {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                     echo "Pipeline unstable due to quality gate failure: ${qg.status}"
-                    currentBuild.result ='UNSTABLE'
+                    currentBuild.result = 'UNSTABLE'
                 }
             }
         }
     }
+}
 
-    // Archive Unit and integration test results, if any
-    junit allowEmptyResults: true,
-            testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/*.xml'
-
+node {
     mailIfStatusChanged env.EMAIL_RECIPIENTS
 }
 
