@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.triology.jenkinsfile</groupId>
     <artifactId>wildfly-kitchensink</artifactId>
-    <version>10.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>war</packaging>
     <name>jenkinsfile (kitchensink)</name>
     <description>A starter Java EE 7 webapp project for use on JBoss WildFly / WildFly, generated from the jboss-javaee6-webapp archetype</description>
@@ -34,6 +34,10 @@
     </licenses>
 
     <properties>
+
+        <!-- Default version if not set via -Drevision. See http://maven.apache.org/maven-ci-friendly.html -->
+        <revision>-SNAPSHOT</revision>
+
         <!-- Explicitly declaring the source encoding eliminates the following
             message: -->
         <!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered
@@ -90,6 +94,11 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>1.4.196</version>
+            </dependency>
+            <dependency>
+                <groupId>de.triology.versionName</groupId>
+                <artifactId>versionName</artifactId>
+                <version>1.0.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -208,9 +217,33 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>de.triology.versionName</groupId>
+            <artifactId>versionName</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <!-- Filter for version name in properties -->
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>app.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <!-- Filter for version name in properties -->
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>app.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
