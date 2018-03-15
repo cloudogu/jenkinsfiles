@@ -12,7 +12,9 @@ pipeline {
         stage('Build') {
             steps {
                 createPipelineTriggers()
-                mvn 'clean install -DskipTests'
+                createVersion()
+
+                mvn "clean install -DskipTests -Parq-wildfly-swarm -Drevision=$versionName"
                 archiveArtifacts '**/target/*.*ar'
             }
         }
@@ -21,13 +23,13 @@ pipeline {
             parallel {
                 stage('Unit Test') {
                     steps {
-                        mvn 'test'
+                        mvn "test -Drevision=$versionName"
                     }
                 }
                 stage('Integration Test') {
                     when { expression { return isNightly() } }
                     steps {
-                        mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                        mvn "verify -DskipUnitTests -Parq-wildfly-swarm -Drevision=$versionName"
                     }
                 }
             }
@@ -36,6 +38,23 @@ pipeline {
         stage('Statical Code Analysis') {
             steps {
                 analyzeWithSonarQubeAndWaitForQualityGoal()
+            }
+        }
+
+        stage('Deploy') {
+            when { expression { return currentBuild.currentResult == 'SUCCESS' } }
+
+            steps {
+                script {
+
+                    // Comment in and out some things so this deploys branch 11-x for this demo.
+                    // In real world projects its good practice to deploy only develop and master branches
+                    if (env.BRANCH_NAME == "master") {
+                        //deployToKubernetes(versionName, 'kubeconfig-prod', 'jenkinsfile.cloudogu.com')
+                    } else { //if (env.BRANCH_NAME == 'develop') {
+                        deployToKubernetes(versionName, 'kubeconfig-staging', '35.202.189.144')
+                    }
+                }
             }
         }
     }
@@ -63,6 +82,54 @@ void createPipelineTriggers() {
     }
 }
 
+String createVersion() {
+    // E.g. "201708140933"
+    String versionName = "${new Date().format('yyyyMMddHHmm')}"
+
+    if (env.BRANCH_NAME != "master") {
+        versionName += '-SNAPSHOT'
+    }
+    echo "Building version $versionName on branch ${env.BRANCH_NAME}"
+    currentBuild.description = versionName
+    env.versionName = versionName
+}
+
+void deployToKubernetes(String versionName, String credentialsId, String hostname) {
+
+    String dockerRegistry = 'us.gcr.io/ces-demo-instances'
+    String imageName = "$dockerRegistry/kitchensink:${versionName}"
+
+    docker.withRegistry("https://$dockerRegistry", 'docker-us.gcr.io/ces-demo-instances') {
+        docker.build(imageName, '.').push()
+    }
+
+    withCredentials([file(credentialsId: credentialsId, variable: 'kubeconfig')]) {
+
+        withEnv(["IMAGE_NAME=$imageName"]) {
+
+            kubernetesDeploy(
+                    credentialsType: 'KubeConfig',
+                    kubeConfig: [path: kubeconfig],
+                    configs: 'k8s/deployment.yaml',
+                    enableConfigSubstitution: true
+            )
+        }
+    }
+
+    timeout(time: 3, unit: 'MINUTES') {
+        waitUntil {
+            sleep(time: 10, unit: 'SECONDS')
+            isVersionDeployed(versionName, "http://$hostname/rest/version")
+        }
+    }
+}
+
+boolean isVersionDeployed(String expectedVersion, String versionEndpoint) {
+    def deployedVersion = sh(returnStdout: true, script: "curl -s $versionEndpoint").trim()
+    echo "Deployed version returned by $versionEndpoint: $deployedVersion. Waiting for $expectedVersion."
+    return expectedVersion == deployedVersion
+}
+
 void analyzeWithSonarQubeAndWaitForQualityGoal() {
     withSonarQubeEnv('sonarcloud.io') {
         mvn "$SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN " +
@@ -71,7 +138,7 @@ void analyzeWithSonarQubeAndWaitForQualityGoal() {
                 // Addionally needed when using the branch plugin (e.g. on sonarcloud.io)
                 "-Dsonar.branch.name=$BRANCH_NAME -Dsonar.branch.target=master"
     }
-    timeout(time: 2, unit: 'MINUTES') {
+    timeout(time: 10, unit: 'MINUTES') { // Normally, this takes only some ms. sonarcloud.io might take minutes, though :-(
         def qg = waitForQualityGate()
         if (qg.status != 'OK') {
             echo "Pipeline unstable due to quality gate failure: ${qg.status}"
