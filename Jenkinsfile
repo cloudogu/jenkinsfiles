@@ -19,21 +19,23 @@ node('docker') { // Require a build executor with docker (label)
             checkout scm
         }
 
+        String versionName = createVersion()
+
         stage('Build') {
-            mvn 'clean install -DskipTests'
+            mvn "clean install -DskipTests -Parq-wildfly-swarm -Drevision=${versionName}"
             archiveArtifacts '**/target/*.*ar'
         }
 
         parallel(
                 unitTest: {
                     stage('Unit Test') {
-                        mvn 'test'
+                        mvn "test -Drevision=${versionName}"
                     }
                 },
                 integrationTest: {
                     stage('Integration Test') {
                         if (isNightly()) {
-                            mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
+                            mvn "verify -DskipUnitTests -Parq-wildfly-swarm -Drevision=${versionName}"
                         }
                     }
                 }
@@ -41,6 +43,19 @@ node('docker') { // Require a build executor with docker (label)
 
         stage('Statical Code Analysis') {
             analyzeWithSonarQubeAndWaitForQualityGoal()
+        }
+
+        stage('Deploy') {
+            if (currentBuild.currentResult == 'SUCCESS') {
+
+                // Comment in and out some things so this deploys branch 11-x for this demo.
+                // In real world projects its good practice to deploy only develop and master branches
+                if (env.BRANCH_NAME == "master") {
+                    //deployToKubernetes(versionName, 'kubeconfig-prod', 'jenkinsfile.cloudogu.com')
+                } else { //if (env.BRANCH_NAME == 'develop') {
+                    deployToKubernetes(versionName, 'kubeconfig-staging', '35.202.189.144')
+                }
+            }
         }
     }
 
@@ -58,6 +73,54 @@ def createPipelineTriggers() {
         return [cron('H H(0-3) * * 1-5')]
     }
     return []
+}
+
+String createVersion() {
+    // E.g. "201708140933"
+    String versionName = "${new Date().format('yyyyMMddHHmm')}"
+
+    if (env.BRANCH_NAME != "master") {
+        versionName += '-SNAPSHOT'
+    }
+    echo "Building version $versionName on branch ${env.BRANCH_NAME}"
+    currentBuild.description = versionName
+    return versionName
+}
+
+void deployToKubernetes(String versionName, String credentialsId, String hostname) {
+
+    String dockerRegistry = 'us.gcr.io/ces-demo-instances'
+    String imageName = "$dockerRegistry/kitchensink:${versionName}"
+
+    docker.withRegistry("https://$dockerRegistry", 'docker-us.gcr.io/ces-demo-instances') {
+        docker.build(imageName, '.').push()
+    }
+
+    withCredentials([file(credentialsId: credentialsId, variable: 'kubeconfig')]) {
+
+        withEnv(["IMAGE_NAME=$imageName"]) {
+
+            kubernetesDeploy(
+                    credentialsType: 'KubeConfig',
+                    kubeConfig: [path: kubeconfig],
+                    configs: 'k8s/deployment.yaml',
+                    enableConfigSubstitution: true
+            )
+        }
+    }
+
+    timeout(time: 3, unit: 'MINUTES') {
+        waitUntil {
+            sleep(time: 10, unit: 'SECONDS')
+            isVersionDeployed(versionName, "http://$hostname/rest/version")
+        }
+    }
+}
+
+boolean isVersionDeployed(String expectedVersion, String versionEndpoint) {
+    def deployedVersion = sh(returnStdout: true, script: "curl -s $versionEndpoint").trim()
+    echo "Deployed version returned by $versionEndpoint: $deployedVersion. Waiting for $expectedVersion."
+    return expectedVersion == deployedVersion
 }
 
 /**
@@ -87,7 +150,7 @@ void analyzeWithSonarQubeAndWaitForQualityGoal() {
                 // Addionally needed when using the branch plugin (e.g. on sonarcloud.io)
                 "-Dsonar.branch.name=$BRANCH_NAME -Dsonar.branch.target=master"
     }
-    timeout(time: 2, unit: 'MINUTES') {
+    timeout(time: 10, unit: 'MINUTES') { // Normally, this takes only some ms. sonarcloud.io might take minutes, though :-(
         def qg = waitForQualityGate()
         if (qg.status != 'OK') {
             echo "Pipeline unstable due to quality gate failure: ${qg.status}"
