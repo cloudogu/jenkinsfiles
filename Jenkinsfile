@@ -48,9 +48,9 @@ node('docker') { // Require a build executor with docker (label)
                 // Comment in and out some things so this deploys branch 11-x for this demo.
                 // In real world projects its good practice to deploy only develop and master branches
                 if (env.BRANCH_NAME == "master") {
-                    //deployToKubernetes(versionName, 'kubeconfig-prod', 'jenkinsfile.cloudogu.com')
+                    //deployToKubernetes(versionName, 'kubeconfig-prod', getServiceIp('kubeconfig-prod'))
                 } else { //if (env.BRANCH_NAME == 'develop') {
-                    deployToKubernetes(versionName, 'kubeconfig-staging', '35.202.189.144')
+                    deployToKubernetes(versionName, 'kubeconfig-staging', getServiceIp('kubeconfig-staging'))
                 }
             }
         }
@@ -134,5 +134,20 @@ void analyzeWithSonarQubeAndWaitForQualityGoal() {
             echo "Pipeline unstable due to quality gate failure: ${qg.status}"
             currentBuild.result = 'UNSTABLE'
         }
+    }
+}
+
+String getServiceIp(String kubeconfigCredential) {
+
+    withCredentials([file(credentialsId: kubeconfigCredential, variable: 'kubeconfig')]) {
+
+        String serviceName = 'kitchensink' // See k8s/service.yaml
+
+        // Using kubectl is so much easier than plain REST via curl (parsing info from kubeconfig is cumbersome!)
+        return sh(returnStdout: true, script:
+                "docker run -v ${kubeconfig}:/root/.kube/config lachlanevenson/k8s-kubectl:v1.9.5" +
+                        " get svc ${serviceName}" +
+                        ' |  awk \'{print $4}\'  | sed -n 2p'
+        ).trim()
     }
 }
