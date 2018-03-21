@@ -23,3 +23,6 @@ The following aspects are covered by the examples:
 9. Docker  
    a Run whole pipeline inside a Docker container ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/9a-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/9a-scripted/Jenkinsfile))  
    b Using Docker inside a custom step (implemented in shared library) ([declarative](https://github.com/triologygmbh/jenkinsfile/blob/9b-declarative/Jenkinsfile) | [scripted](https://github.com/triologygmbh/jenkinsfile/blob/9b-scripted/Jenkinsfile) | [shared library](https://github.com/triologygmbh/jenkinsfile/tree/9b-shared-library))
+10. Statical code analysis with SonarQube
+  a separate analysis and quality gate stages ("by the book")
+  b 
