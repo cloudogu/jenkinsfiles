@@ -82,7 +82,7 @@ String createVersion() {
     if (env.BRANCH_NAME != "master") {
         versionName += '-SNAPSHOT'
     }
-    echo "Building version $versionName on branch ${env.BRANCH_NAME}"
+    echo "Building version ${versionName} on branch ${env.BRANCH_NAME}"
     currentBuild.description = versionName
     return versionName
 }
@@ -90,15 +90,15 @@ String createVersion() {
 void deployToKubernetes(String versionName, String credentialsId, String hostname) {
 
     String dockerRegistry = 'us.gcr.io/ces-demo-instances'
-    String imageName = "$dockerRegistry/kitchensink:${versionName}"
+    String imageName = "${dockerRegistry}/kitchensink:${versionName}"
 
-    docker.withRegistry("https://$dockerRegistry", 'docker-us.gcr.io/ces-demo-instances') {
+    docker.withRegistry("https://${dockerRegistry}", 'docker-us.gcr.io/ces-demo-instances') {
         docker.build(imageName, '.').push()
     }
 
     withCredentials([file(credentialsId: credentialsId, variable: 'kubeconfig')]) {
 
-        withEnv(["IMAGE_NAME=$imageName"]) {
+        withEnv(["IMAGE_NAME=${imageName}"]) {
 
             kubernetesDeploy(
                     credentialsType: 'KubeConfig',
@@ -112,14 +112,14 @@ void deployToKubernetes(String versionName, String credentialsId, String hostnam
     timeout(time: 3, unit: 'MINUTES') {
         waitUntil {
             sleep(time: 10, unit: 'SECONDS')
-            isVersionDeployed(versionName, "http://$hostname/rest/version")
+            isVersionDeployed(versionName, "http://${hostname}/rest/version")
         }
     }
 }
 
 boolean isVersionDeployed(String expectedVersion, String versionEndpoint) {
-    def deployedVersion = sh(returnStdout: true, script: "curl -s $versionEndpoint").trim()
-    echo "Deployed version returned by $versionEndpoint: $deployedVersion. Waiting for $expectedVersion."
+    def deployedVersion = sh(returnStdout: true, script: "curl -s ${versionEndpoint}").trim()
+    echo "Deployed version returned by ${versionEndpoint}: ${deployedVersion}. Waiting for ${expectedVersion}."
     return expectedVersion == deployedVersion
 }
 
@@ -144,11 +144,11 @@ boolean isTimeTriggeredBuild() {
 
 void analyzeWithSonarQubeAndWaitForQualityGoal() {
     withSonarQubeEnv('sonarcloud.io') {
-        mvn "$SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN " +
+        mvn "${SONAR_MAVEN_GOAL} -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN} " +
                 // Here, we could define e.g. sonar.organization, needed for sonarcloud.io
-                "$SONAR_EXTRA_PROPS " +
+                "${SONAR_EXTRA_PROPS} " +
                 // Addionally needed when using the branch plugin (e.g. on sonarcloud.io)
-                "-Dsonar.branch.name=$BRANCH_NAME -Dsonar.branch.target=master"
+                "-Dsonar.branch.name=${BRANCH_NAME} -Dsonar.branch.target=master"
     }
     timeout(time: 10, unit: 'MINUTES') { // Normally, this takes only some ms. sonarcloud.io might take minutes, though :-(
         def qg = waitForQualityGate()
