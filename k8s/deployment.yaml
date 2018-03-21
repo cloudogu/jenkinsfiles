@@ -21,16 +21,21 @@ spec:
         name: kitchensink
         resources:
           requests:
-            memory: 512M
+            memory: 256Mi
+            cpu: 250m
+          limits:
+            memory: 512Mi
             cpu: 500m
         readinessProbe:
           httpGet:
             path: /rest/version
             port: 8080
+          initialDelaySeconds: 15
         livenessProbe:
           httpGet:
             path: /rest/version
             port: 8080
+          initialDelaySeconds: 30
         env:
         - name: JAVA_OPTS
           value: -Xmx512M
