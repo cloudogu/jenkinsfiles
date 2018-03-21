@@ -50,9 +50,9 @@ pipeline {
                     // Comment in and out some things so this deploys branch 11-x for this demo.
                     // In real world projects its good practice to deploy only develop and master branches
                     if (env.BRANCH_NAME == "master") {
-                        //deployToKubernetes(versionName, 'kubeconfig-prod', 'jenkinsfile.cloudogu.com')
+                        //deployToKubernetes(versionName, 'kubeconfig-prod', getServiceIp('kubeconfig-prod'))
                     } else { //if (env.BRANCH_NAME == 'develop') {
-                        deployToKubernetes(versionName, 'kubeconfig-staging', '35.202.189.144')
+                        deployToKubernetes(versionName, 'kubeconfig-staging', getServiceIp('kubeconfig-staging'))
                     }
                 }
             }
@@ -143,6 +143,28 @@ void analyzeWithSonarQubeAndWaitForQualityGoal() {
         if (qg.status != 'OK') {
             echo "Pipeline unstable due to quality gate failure: ${qg.status}"
             currentBuild.result = 'UNSTABLE'
+        }
+    }
+}
+String getServiceIp(String kubeconfigCredential) {
+
+    withCredentials([file(credentialsId: kubeconfigCredential, variable: 'kubeconfig')]) {
+        String serviceName = 'kitchensink' // See k8s/service.yaml
+        String apiServer = "\$(cat ${kubeconfig} | grep server |  cut -f 2- -d ':' | tr -d ' ')"
+        String token = sh(returnStdout: true, script: "cat ${kubeconfig} | grep token | cut -f 2 -d ':' | tr -d ' '").trim()
+        try {
+            // In order to hide the token from the jenkins log, we write it to a file
+            writeFile file: 'curlAuthHeader.conf', text: "header = \"Authorization: Bearer ${token}\""
+            String namespace = "\$(cat ${kubeconfig} | grep namespace | cut -f 2 -d ':' | tr -d ' ')"
+
+            withEnv(["TOKEN=${token}"]) { // Don't show token in jenkins log
+                String queryServiceIp = "curl ${apiServer}/api/v1/namespaces/${namespace}/services/${serviceName} " +
+                        "--insecure --fail --silent --config curlAuthHeader.conf " +
+                        "| grep ip | cut  -f 2- -d ':' | tr -d ' \\\"'"
+                return sh(returnStdout: true, script: queryServiceIp).trim()
+            }
+        } finally {
+            sh 'rm -f curlAuthHeader.conf'
         }
     }
 }
