@@ -4,10 +4,10 @@ This project contains examples for the [Jenkins pipeline plugin](https://jenkins
 
 The examples were developed while working on an article series called *Coding Continuous Delivery* published in [Java aktuell](http://www.ijug.eu/java-aktuell/das-magazin.html) (both English translation and German original will be published here shortly):
 * 01/2018 (covering examples on branches 1 to 5)
-  * 🇬🇧Jenkins pipeline plugin basics
+  * 🇬🇧 [Jenkins pipeline plugin basics](https://cloudogu.com/en/blog/continuous_delivery_1_basics.html)
   * 🇩🇪 Grundlagen des Jenkins-Pipeline-Plug-ins
 * 02/2018 (covering examples on branches 6 and 7)
-  * 🇬🇧 Performance optimization for the Jenkins Pipeline
+  * 🇬🇧 [Performance optimization for the Jenkins Pipeline](https://cloudogu.com/en/blog/continuous_delivery_2.html)
   * 🇩🇪 Performance Optimierung für die Jenkins Pipeline
 * 03/2018 (covering examples on branches 8 and 9)
   * 🇬🇧 Helpful Tools for the Jenkins Pipeline
