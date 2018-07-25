@@ -4,19 +4,52 @@ This project contains examples for the [Jenkins pipeline plugin](https://jenkins
 
 The examples were developed while working on an article series called *Coding Continuous Delivery* published in [Java aktuell](http://www.ijug.eu/java-aktuell/das-magazin.html). Both English translation and German original can be found on the [Cloudogu Blog](https://cloudogu.com/en/blog).
 
-* 01/2018 (covering examples on branches 1 to 5)
-  * 🇬🇧 [Jenkins pipeline plugin basics](https://cloudogu.com/en/blog/continuous_delivery_1_basics)
-  * 🇩🇪 [Grundlagen des Jenkins-Pipeline-Plug-ins](https://cloudogu.com/downloads/publications/2018-01-Java-Aktuell--Coding-Continous-Delivery-Grundlagen-des-Jenkins-Pipeline-Plug-ins.pdf)
-* 02/2018 (covering examples on branches 6 and 7)
-  * 🇬🇧 [Performance optimization for the Jenkins Pipeline](https://cloudogu.com/en/blog/continuous_delivery_2)
-  * 🇩🇪 [Performance Optimierung für die Jenkins Pipeline](https://cloudogu.com/downloads/publications/2018-02-Java-Aktuell--Coding_Continuous_Delivery%E2%80%93Performance-Optimierung_f%C3%BCr_die_Jenkins-Pipeline.pdf)
-* 03/2018 (covering examples on branches 8 and 9)
-  * 🇬🇧 [Helpful Tools for the Jenkins Pipeline](https://cloudogu.com/en/blog/continuous_delivery_part_3)
-  * 🇩🇪 [Hilfreiche Werkzeuge für die Jenkins Pipeline](https://cloudogu.com/downloads/publications/2018-03-Java-aktuell--Coding_Continuous_Delivery-Hilfreiche%20Werkzeuge%20f%C3%BCr%20die%20Jenkins-Pipeline.pdf)
-* 04/2018 (covering examples on branches 10 and 11)
-  * 🇬🇧 Statical Code Analysis with SonarQube and deployment to Kubernetes et al. with Jenkins Pipelines
-  * 🇩🇪 Statische Code Analyse mit SonarQube und Deployment auf Kubernetes et al. mit Jenkins Pipelines
-      
+<table  border="0">
+  <tr>
+    <td colspan="2">01/2018 (covering examples on branches 1 to 5)</td>
+  </tr>
+  <tr>
+    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/04/jenkins_grundlagen.png" width=50% /></td>
+    <td><a href="https://cloudogu.com/en/blog/continuous_delivery_1_basics"> 🇬🇧 Jenkins pipeline plugin basics</a></td>
+  </tr>
+  <tr>
+   <td><a href="https://cloudogu.com/de/blog/continuous_delivery_1_grundlagen"> 🇩🇪 Grundlagen des Jenkins-Pipeline-Plug-ins</a></td>
+  </tr>
+ 
+   <tr>
+    <td colspan="2">02/2018 (covering examples on branches 6 and 7)</td>
+  </tr>
+  <tr>
+    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/04/jenkins_optimization.png" width=50% /></td>
+    <td><a href="https://cloudogu.com/en/blog/continuous_delivery_2"> 🇬🇧 Performance optimization for the Jenkins Pipeline</a></td>
+  </tr>
+  <tr>
+   <td><a href="https://cloudogu.com/de/blog/continuous_delivery_2_de"> 🇩🇪 Performance Optimierung für die Jenkins Pipeline</a></td>
+  </tr>
+  
+   <tr>
+    <td colspan="2">03/2018 (covering examples on branches 8 and 9)</td>
+  </tr>
+  <tr>
+    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/05/jenkins_werkzeuge.png" width=50% /></td>
+    <td><a href="https://cloudogu.com/en/blog/continuous_delivery_part_3"> 🇬🇧 Helpful Tools for the Jenkins Pipeline</a></td>
+  </tr>
+  <tr>
+   <td><a href="https://cloudogu.com/de/blog/continuous_delivery_teil_3"> 🇩🇪 Hilfreiche Werkzeuge für die Jenkins Pipeline</a></td>
+  </tr>
+
+   <tr>
+    <td colspan="2">04/2018 (covering examples on branches 10 and 11)</td>
+  </tr>
+  <tr>
+    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/Jenkins_KubernetesSonarqube.png" width=50% /></td>
+    <td><a href="https://cloudogu.com/en/blog/continuous_delivery_4_en"> 🇬🇧 Statical Code Analysis with SonarQube and deployment to Kubernetes et al. with Jenkins Pipelines</a></td>
+  </tr>
+  <tr>
+   <td><a href="https://cloudogu.com/de/blog/continuous_delivery_4_de"> 🇩🇪 Statische Code Analyse mit SonarQube und Deployment auf Kubernetes et al. mit Jenkins Pipelines</a></td>
+  </tr>
+  
+</table>
 
 The project being built by the pipeline examples is [wildfly/quickstart/kitchensink](https://github.com/wildfly/quickstart/tree/cfd2e05d16e4ae788bc12486f5b30d668b921973/kitchensink), a typical JEE web app basing on CDI, JSF, JPA, EJB, JAX-RS and integration tests with arquillian.
 It was extended slightly to allow for running integration tests using WildFly Swarm and (in branch `11-x`) to provide its version name via REST. 
