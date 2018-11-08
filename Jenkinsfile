@@ -23,7 +23,7 @@ pipeline {
                     }
                 }
                 stage('Integration Test') {
-                    when { expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 0..3 } }
+                    when { expression { isTimeTriggeredBuild() } }
                     steps {
                         mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                     }
@@ -41,6 +41,21 @@ pipeline {
         }
     }
 }
+
+
+/**
+ * @return {@code true} if the build was time triggered, otherwise {@code false}
+ * @since workflow-support plugin 2.22
+ */
+boolean isTimeTriggeredBuild() {
+    for (Object currentBuildCause : currentBuild.getBuildCauses()) {
+        if (currentBuildCause._class.contains('TimerTriggerCause')) {
+            return true
+        }
+    }
+    return false
+}
+
 
 void createPipelineTriggers() {
     script {
