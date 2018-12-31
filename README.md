@@ -141,12 +141,14 @@ Finally, add a Username and Password credential called `docker-us.gcr.io/ces-dem
  
 ## Shared libraries
 
-* [cloudogu/ces-build-lib](https://github.com/cloudogu/ces-build-lib)
-* [mozilla/fxtest-jenkins-pipeline](https://github.com/mozilla/fxtest-jenkins-pipeline)
-* [docker/jenkins-pipeline-scripts](https://github.com/docker/jenkins-pipeline-scripts)
-* [fabric8io/fabric8-pipeline-library](https://github.com/fabric8io/fabric8-pipeline-library)
-* [Shared Library Demo](https://github.com/jenkinsci/workflow-aggregator-plugin/tree/master/demo)
- 
+A collection of shared libraries to be used as reference.
+
+* [cloudogu/ces-build-lib](https://github.com/cloudogu/ces-build-lib) - Contains features for Maven, Docker, SonarQube and others
+* [mozilla/fxtest-jenkins-pipeline](https://github.com/mozilla/fxtest-jenkins-pipeline) - used by Firefox Test Engineering
+* [docker/jenkins-pipeline-scripts](https://github.com/docker/jenkins-pipeline-scripts) -  helper functions and classes used by Jenkins instances managed by Docker, Inc.
+* [fabric8io/fabric8-pipeline-library](https://github.com/fabric8io/fabric8-pipeline-library) -  reusable Jenkins Pipeline steps and functions to be used with the fabric8 platform.
+* [Mirantis/pipeline-library](https://github.com/Mirantis/pipeline-library) - Contains Salt commands, Git actions, Artifactory management, Docker image building, AWS and OpenStack provisioning, etc.
+* [Shared Library Demo](https://github.com/jenkinsci/workflow-aggregator-plugin/tree/master/demo) - Demonstrates a continuous delivery pipeline of Java web application including library
  
 ## Others
 
