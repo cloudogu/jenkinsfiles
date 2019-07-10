@@ -96,8 +96,7 @@ void waitForQualityGateAndSetResult() {
     timeout(time: 2, unit: 'MINUTES') {
         def qg = waitForQualityGate()
         if (qg.status != 'OK') {
-            echo "Pipeline unstable due to quality gate failure: ${qg.status}"
-            currentBuild.result = 'UNSTABLE'
+            unstable("Pipeline unstable due to quality gate failure: ${qg.status}")
         }
     }
 }
