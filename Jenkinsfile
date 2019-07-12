@@ -131,8 +131,7 @@ void analyzeWithSonarQubeAndWaitForQualityGoal() {
     timeout(time: 10, unit: 'MINUTES') { // Normally, this takes only some ms. sonarcloud.io might take minutes, though :-(
         def qg = waitForQualityGate()
         if (qg.status != 'OK') {
-            echo "Pipeline unstable due to quality gate failure: ${qg.status}"
-            currentBuild.result = 'UNSTABLE'
+            unstable("Pipeline unstable due to quality gate failure: ${qg.status}")
         }
     }
 }
