@@ -121,7 +121,7 @@ boolean isVersionDeployed(String expectedVersion, String versionEndpoint) {
 }
 
 void analyzeWithSonarQubeAndWaitForQualityGoal() {
-    withSonarQubeEnv('sonarcloud.io') {
+    withSonarQubeEnv('sonarcloud.io-cloudogu') {
         mvn "${SONAR_MAVEN_GOAL} -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN} " +
                 // Here, we could define e.g. sonar.organization, needed for sonarcloud.io
                 "${SONAR_EXTRA_PROPS} " +
