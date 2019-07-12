@@ -1,6 +1,6 @@
 #!groovy
 
-@Library('github.com/triologygmbh/jenkinsfile@f38945a') _
+@Library('github.com/triologygmbh/jenkinsfile@ad12c8a9') _
 
 node('docker') { // Require a build executor with docker (label)
 
@@ -31,7 +31,7 @@ node('docker') { // Require a build executor with docker (label)
                 },
                 integrationTest: {
                     stage('Integration Test') {
-                        if (isNightly()) {
+                        if (isTimeTriggeredBuild()) {
                             mvn "verify -DskipUnitTests -Parq-wildfly-swarm -Drevision=${versionName}"
                         }
                     }
