@@ -1,4 +1,4 @@
-@Library('github.com/triologygmbh/jenkinsfile@f38945a') _
+@Library('github.com/triologygmbh/jenkinsfile@ad12c8a9') _
 
 pipeline {
     agent { label 'docker' } // Require a build executor with docker
@@ -25,7 +25,7 @@ pipeline {
                     }
                 }
                 stage('Integration Test') {
-                    when { expression { return isNightly() } }
+                    when { expression { return isTimeTriggeredBuild() } }
                     steps {
                         mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                     }
