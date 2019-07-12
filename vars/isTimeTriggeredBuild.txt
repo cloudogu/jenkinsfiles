@@ -1,0 +1,9 @@
+<p>
+Returns true if the build was time triggered, otherwise false.
+Requires workflow-support plugin 2.22. Obsoletes isNightly().
+</p>
+<dl>
+  <dt>`isTimeTriggeredBuild()`</dt>
+  <dd>
+    Returns true if the build was time triggered, otherwise false.
+</dl>
