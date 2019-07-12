@@ -1,4 +1,4 @@
-@Library('github.com/triologygmbh/jenkinsfile@e00bbf0') _
+@Library('github.com/triologygmbh/jenkinsfile@6610cd92') _
 
 pipeline {
     agent any
@@ -25,7 +25,7 @@ pipeline {
                     }
                 }
                 stage('Integration Test') {
-                    when { expression { return isNightly() } }
+                    when { expression { return isTimeTriggeredBuild() } }
                     steps {
                         mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                     }
