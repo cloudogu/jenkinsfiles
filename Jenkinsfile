@@ -1,7 +1,4 @@
-@Library('github.com/triologygmbh/jenkinsfile@e00bbf0') _
-
-// Query outside of node, in order to get pending script approvals
-//boolean isTimeTriggered = isTimeTriggeredBuild()
+@Library('github.com/triologygmbh/jenkinsfile@6610cd92') _
 
 node {
 
@@ -30,7 +27,7 @@ node {
                 },
                 integrationTest: {
                     stage('Integration Test') {
-                        if (isNightly()) {
+                        if (isTimeTriggeredBuild()) {
                             mvn 'verify -DskipUnitTests -Parq-wildfly-swarm '
                         }
                     }
@@ -51,23 +48,4 @@ def createPipelineTriggers() {
         return [cron('H H(0-3) * * 1-5')]
     }
     return []
-}
-
-/**
- * Note that this requires the following script approvals by your jenkins administrator
- * (via https://JENKINS-URL/scriptApproval/):
- * <br/>
- * {@code method hudson.model.Run getCauses}
- * {@code method org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper getRawBuild}.
- * <br/><br/>
- * Note that that the pending script approvals only appear if this method is called <b>outside a {@code node}</b>
- * within the pipeline!
- *
- * @return {@code true} if the build was time triggered, otherwise {@code false}
- */
-boolean isTimeTriggeredBuild() {
-    for (Object currentBuildCause : currentBuild.rawBuild.getCauses()) {
-        return currentBuildCause.class.getName().contains('TimerTriggerCause')
-    }
-    return false
 }
