@@ -99,6 +99,16 @@ In order to distinguish this workers from others, they provide a `docker` label.
 From branch 10 the [SonarQube Scanner plugin](https://plugins.jenkins.io/sonar) and a SonarQube instance `sonarcloud.io` set up in Jenkins.
 In addition, in SonarQube, a webhook to `https://JENKINS/sonarqube-webhook` must be configured.
 
+Before Jenkins is able to analyse the branches a first analysis has to be done (e.g. from your developer machine) analysis,
+e.g. like so
+
+```bash
+mvn clean install -Pjenkins -DskipITs
+mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=<SECURITY TOKEN> -Dsonar.organization=<YOUR-ORG-KEY>
+```
+If you want the quality gate to fail (for showcases), one option is to analyse one of the 10a branches but remove the 
+class `Untested` before.
+
 ## 11. Kubernetes
 
 In order to deploy to Kubernetes the examples in the `11-x`-branches require the [Kubernetes Continuous Deploy plugin](https://plugins.jenkins.io/kubernetes-cd).
@@ -109,8 +119,10 @@ kubectl apply -f k8s/namespace.yaml
 kubectl apply --namespace jenkins-ns -f k8s/service.yaml,k8s/serviceaccount.yaml
 k8s/create-kubeconfig jenkins-sa --namespace=jenkins-ns > jenkins.kubeconfig
 ```
-Then, add the `jenkins.kubeconfig` as Jenkins file credential, called `kubeconfig-staging`.  
-Finally, add a Username and Password credential called `docker-us.gcr.io/ces-demo-instances` (e.g. on [GCR](https://cloud.google.com/container-registry/docs/advanced-authentication#using_a_json_key_file), the user is `json_key` and the password is the a JSON in single quotes with line breaks removed!).
+Then, add the `jenkins.kubeconfig` as Jenkins file credential, called `kubeconfig-oss-deployer`.  
+Finally, add a Username and Password credential called `hub.docker.com-cesmarvin` 
+(e.g. on [GCR](https://cloud.google.com/container-registry/docs/advanced-authentication#using_a_json_key_file), the user is `_json_key` and the password is the a JSON in single quotes with line breaks removed - `cat account.json`).
+and change the image name to match your registry.
 
 # Jenkins Build status
 
