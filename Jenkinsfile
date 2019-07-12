@@ -50,7 +50,7 @@ node('docker') { // Require a build executor with docker (label)
                 if (env.BRANCH_NAME == "master") {
                     //deployToKubernetes(versionName, 'kubeconfig-prod', getServiceIp('kubeconfig-prod'))
                 } else { //if (env.BRANCH_NAME == 'develop') {
-                    deployToKubernetes(versionName, 'kubeconfig-staging', getServiceIp('kubeconfig-staging'))
+                    deployToKubernetes(versionName, 'kubeconfig-oss-deployer', getServiceIp('kubeconfig-oss-deployer'))
                 }
             }
         }
@@ -86,10 +86,9 @@ String createVersion() {
 
 void deployToKubernetes(String versionName, String credentialsId, String hostname) {
 
-    String dockerRegistry = 'us.gcr.io/ces-demo-instances'
-    String imageName = "${dockerRegistry}/kitchensink:${versionName}"
+    String imageName = "cloudogu/kitchensink:${versionName}"
 
-    docker.withRegistry("https://${dockerRegistry}", 'docker-us.gcr.io/ces-demo-instances') {
+    docker.withRegistry('', 'hub.docker.com-cesmarvin') {
         docker.build(imageName, '.').push()
     }
 
