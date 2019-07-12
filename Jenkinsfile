@@ -124,7 +124,8 @@ void deployToKubernetes(String versionName, String credentialsId, String hostnam
 }
 
 boolean isVersionDeployed(String expectedVersion, String versionEndpoint) {
-    def deployedVersion = sh(returnStdout: true, script: "curl -s ${versionEndpoint}").trim()
+    // "|| true" is needed to avoid failing builds on connection refused (e.g. during first deployment)
+    def deployedVersion = sh(returnStdout: true, script: "curl -s ${versionEndpoint} || true").trim()
     echo "Deployed version returned by ${versionEndpoint}: ${deployedVersion}. Waiting for ${expectedVersion}."
     return expectedVersion == deployedVersion
 }
