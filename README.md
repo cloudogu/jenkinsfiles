@@ -1,5 +1,5 @@
 triologygmbh/jenkinsfile 
 ========================
-Part 11: Deployment (scripted syntax)
+Part 12: Deployment to Kubernetes using Helm (scripted syntax)
 
 See Readme in Master Branch for more info.

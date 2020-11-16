@@ -12,6 +12,9 @@ node('docker') { // Require a build executor with docker (label)
                 buildDiscarder(logRotator(numToKeepStr: '10'))
         ])
 
+        kubectlImage = 'lachlanevenson/k8s-kubectl:v1.19.3'
+        helmImage = 'lachlanevenson/k8s-helm:v3.4.1'
+        
         stage('Checkout') {
             checkout scm
         }
@@ -45,12 +48,12 @@ node('docker') { // Require a build executor with docker (label)
         stage('Deploy') {
             if (currentBuild.currentResult == 'SUCCESS') {
 
-                // Comment in and out some things so this deploys branch 11-x for this demo.
-                // In real world projects its good practice to deploy only develop and master branches
-                if (env.BRANCH_NAME == "master") {
-                    //deployToKubernetes(versionName, 'kubeconfig-prod', getServiceIp('kubeconfig-prod'))
+                // Comment in and out some things so this deploys branch 12-x for this demo.
+                // In real world projects its good practice to deploy only develop and main branches
+                if (env.BRANCH_NAME == "main") {
+                    //deployToKubernetes('production', versionName, 'kubeconfig-prod')
                 } else { //if (env.BRANCH_NAME == 'develop') {
-                    deployToKubernetes(versionName, 'kubeconfig-oss-deployer', getServiceIp('kubeconfig-oss-deployer'))
+                    deployToKubernetes('staging', versionName, 'kubeconfig-oss-deployer')
                 }
             }
         }
@@ -62,7 +65,6 @@ node('docker') { // Require a build executor with docker (label)
 
     mailIfStatusChanged env.EMAIL_RECIPIENTS
 }
-
 
 def createPipelineTriggers() {
     if (env.BRANCH_NAME == 'master') {
@@ -84,40 +86,28 @@ String createVersion() {
     return versionName
 }
 
-void deployToKubernetes(String versionName, String credentialsId, String hostname) {
-
-    String imageName = "cloudogu/kitchensink:${versionName}"
+void deployToKubernetes(String stage, String versionName, String credentialsId) {
+    String imageRepo = "cloudogu/kitchensink"
+    String imageName = "${imageRepo}:${versionName}"
 
     docker.withRegistry('', 'hub.docker.com-cesmarvin') {
         docker.build(imageName, '.').push()
     }
 
-    withCredentials([file(credentialsId: credentialsId, variable: 'kubeconfig')]) {
+    String helmReleaseName = 'kitchensink'
+    String chartFolder = "chart"
+    String helmFlags = "--values=chart/values-${stage}.yaml --set image.repository=${imageRepo} --set image.tag=${versionName}"
+    String helmResourceType = 'Deployment'
+    String helmResourceName = ''
 
-        withEnv(["IMAGE_NAME=${imageName}"]) {
-
-            kubernetesDeploy(
-                    credentialsType: 'KubeConfig',
-                    kubeConfig: [path: kubeconfig],
-                    configs: 'k8s/deployment.yaml',
-                    enableConfigSubstitution: true
-            )
+    docker.image(helmImage).inside("--entrypoint=''") {
+        withCredentials([file(credentialsId: credentialsId, variable: 'KUBECONFIG')]) {
+            sh "helm upgrade --install ${helmFlags} ${helmReleaseName} ${chartFolder}"
+            helmResourceName = getHelmChartResourceName(helmResourceType, helmReleaseName, helmFlags, chartFolder)
         }
     }
 
-    timeout(time: 3, unit: 'MINUTES') {
-        waitUntil {
-            sleep(time: 10, unit: 'SECONDS')
-            isVersionDeployed(versionName, "http://${hostname}/rest/version")
-        }
-    }
-}
-
-boolean isVersionDeployed(String expectedVersion, String versionEndpoint) {
-    // "|| true" is needed to avoid failing builds on connection refused (e.g. during first deployment)
-    def deployedVersion = sh(returnStdout: true, script: "curl -s ${versionEndpoint} || true").trim()
-    echo "Deployed version returned by ${versionEndpoint}: ${deployedVersion}. Waiting for ${expectedVersion}."
-    return expectedVersion == deployedVersion
+    waitForRolloutToComplete(credentialsId, helmResourceType, helmResourceName)
 }
 
 void analyzeWithSonarQubeAndWaitForQualityGoal() {
@@ -136,17 +126,39 @@ void analyzeWithSonarQubeAndWaitForQualityGoal() {
     }
 }
 
-String getServiceIp(String kubeconfigCredential) {
+String getHelmChartResourceName(String resource, String releaseName, String helmFlags, String chartLocation) {
+    sh(returnStdout: true, script:
+            "helm template ${releaseName} ${helmFlags} ${chartLocation} | " +
+                    // Find deployment amongst all stuff rendered by helm
+                    "awk '/${resource}/,/--/' | " +
+                    // Find metadata and name
+                    "awk '/metadata/,/  name:/' | " +
+                    // grep only the "pure" name lines
+                    "grep -e '^[ ]*name:' | " +
+                    // keep only the first bellow metadata
+                    "head -1 | " +
+                    // keep only the value, drop "name:"
+                    "sed 's@name:@@'")
+            // Get rid of whitespaces
+            .trim()
+}
 
-    withCredentials([file(credentialsId: kubeconfigCredential, variable: 'kubeconfig')]) {
-
-        String serviceName = 'kitchensink' // See k8s/service.yaml
-
-        // Using kubectl is so much easier than plain REST via curl (parsing info from kubeconfig is cumbersome!)
-        return sh(returnStdout: true, script:
-                "docker run -v ${kubeconfig}:/root/.kube/config lachlanevenson/k8s-kubectl:v1.9.5" +
-                        " get svc ${serviceName}" +
-                        ' |  awk \'{print $4}\'  | sed -n 2p'
-        ).trim()
+void waitForRolloutToComplete(String credentialsId, String resourceType, String resourceName, String timeout = '2m') {
+    withKubectl(credentialsId) {
+        sh "kubectl rollout status ${resourceType} ${resourceName} --timeout=${timeout}"
     }
 }
+
+void withKubectl(String credentialsId, Closure body) {
+
+    // Namespace is set via KUBECONFIG!
+
+    withCredentials([file(credentialsId: credentialsId, variable: 'KUBECONFIG')]) {
+         docker.image(kubectlImage).inside("--entrypoint=''") {
+            body()
+        }
+    }
+}
+
+String kubectlImage
+String helmImage

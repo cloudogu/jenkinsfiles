@@ -1,0 +1,3 @@
+# Values for Production. Declares only the ones that are different than in values.yaml
+
+replicaCount: 3
