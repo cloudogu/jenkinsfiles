@@ -1,4 +1,4 @@
-triologygmbh/jenkinsfile 
+testing/jenkinsfile 
 ========================
 This project contains examples for the [Jenkins pipeline plugin](https://jenkins.io/solutions/pipeline/), comparing both declarative and scripted syntax.
 
