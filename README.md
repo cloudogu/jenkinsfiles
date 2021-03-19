@@ -9,7 +9,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">01/2018 (covering examples on branches 1 to 5)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/04/jenkins_grundlagen.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_1_150x150-72912009bc1838646971990e84f8c7f36264e9a5426fc0a22670f33630df4143.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/continuous_delivery_1_basics"> 🇬🇧 Jenkins pipeline plugin basics</a></td>
   </tr>
   <tr>
@@ -20,7 +20,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">02/2018 (covering examples on branches 6 and 7)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/04/jenkins_optimization.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_2_150x150-8fab749f19e2654d763cd0de8d0b00af1ad2ab1cd35e2bff64afd7b6eb76a2d8.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/continuous_delivery_2"> 🇬🇧 Performance optimization for the Jenkins Pipeline</a></td>
   </tr>
   <tr>
@@ -31,7 +31,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">03/2018 (covering examples on branches 8 and 9)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/05/jenkins_werkzeuge.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_3_150x150-c62d32c11a8e77b9e6a01bfb5e4f969f440be8bc984e8ba7c03426ff469bdd6b.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/continuous_delivery_part_3"> 🇬🇧 Helpful Tools for the Jenkins Pipeline</a></td>
   </tr>
   <tr>
@@ -42,7 +42,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">04/2018 (covering examples on branches 10 and 11)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/Jenkins_KubernetesSonarqube.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_4_150x150-91cbd52bc2d1a8e263a6320078f77708e70ae505efa81f474f5f680cf64fd58b.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/continuous_delivery_4_en"> 🇬🇧 Statical Code Analysis with SonarQube and deployment to Kubernetes et al. with Jenkins Pipelines</a></td>
   </tr>
   <tr>
