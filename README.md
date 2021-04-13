@@ -2,7 +2,7 @@ cloudogu/jenkinsfiles
 ========================
 This project contains examples for the [Jenkins pipeline plugin](https://jenkins.io/solutions/pipeline/), comparing both declarative and scripted syntax.
 
-The examples were developed while working on an article series called *Coding Continuous Delivery* published in [Java aktuell](http://www.ijug.eu/java-aktuell/das-magazin.html). Both English translation and German original can be found on the [Cloudogu Blog](https://cloudogu.com/en/blog).
+The examples were developed while working on an article series called *Coding Continuous Delivery* published in [Java aktuell](http://www.ijug.eu/java-aktuell/das-magazin.html). Both English translation and German original can be found on the [Cloudogu Blog](https://cloudogu.com/en/blog/?mtm_campaign=jenkinsfiles&mtm_kwd=blog&mtm_source=github&mtm_medium=link).
 
 <table  border="0">
   <tr>
