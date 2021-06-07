@@ -53,7 +53,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">02/2021 (covering example on branch 12, also explains how to do GitOps with Jenkins. See also <a href="https://github.com/cloudogu/gitops-build-lib">GitOps Build Lib</a> and <a href="https://github.com/cloudogu/k8s-gitops-playground">GitOps Playground</a>.)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2021/GitOps-CIOps_150x150-6e895792ab83de34260b5bb6a48bfc5539a401354eaa7c86fe1b9d002d73c4cf.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2021/Coding_CD_5_150x150-6e42097ba21ca33a27b60eed66daf94240fab30b29f1d33574bc487d8fca064d.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/ciops-vs-gitops_en"> 🇬🇧 CIOps vs. GitOps with Jenkins</a></td>
   </tr>
   <tr>
