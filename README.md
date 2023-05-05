@@ -9,7 +9,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">01/2018 (covering examples on branches 1 to 5)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_1_150x150-72912009bc1838646971990e84f8c7f36264e9a5426fc0a22670f33630df4143.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_1_150x150-2a7fca8725de60e3f31c1acb0b0153ad072e6074d81a9b619366e30d5a3fbecdae66477c70f7e5e84a508a7a84ab5bbe099c9b1738e83c64dd451a4d426d5b58.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/continuous_delivery_1_basics"> 🇬🇧 Jenkins pipeline plugin basics</a></td>
   </tr>
   <tr>
@@ -20,7 +20,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">02/2018 (covering examples on branches 6 and 7)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_2_150x150-8fab749f19e2654d763cd0de8d0b00af1ad2ab1cd35e2bff64afd7b6eb76a2d8.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_2_150x150-11fcdc1415bbac41121ad7857ca94c30dc5b4e9b9e667748f79eae59d6222316b73867aafb98b42267b105d8098f281a87de497fede64d02816592c62f66da0b.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/continuous_delivery_2"> 🇬🇧 Performance optimization for the Jenkins Pipeline</a></td>
   </tr>
   <tr>
@@ -31,7 +31,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">03/2018 (covering examples on branches 8 and 9)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_3_150x150-c62d32c11a8e77b9e6a01bfb5e4f969f440be8bc984e8ba7c03426ff469bdd6b.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_3_150x150-9f511846c0788fa4fe18e6daf82ae74feb6e2e62cc6cbdc2d7a8cfba563170b416ebcee6bc0cc2d65bbe9344acb1a1b4799c23fb3ba1e7c87b0de02270f20527.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/continuous_delivery_part_3"> 🇬🇧 Helpful Tools for the Jenkins Pipeline</a></td>
   </tr>
   <tr>
@@ -42,7 +42,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">04/2018 (covering examples on branches 10 and 11)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_4_150x150-91cbd52bc2d1a8e263a6320078f77708e70ae505efa81f474f5f680cf64fd58b.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/Coding_CD_4_150x150-a567bbe19ae59e957f86a7e07d0d88924be209dd5e899cef97f523565ae10b6a204310fb842e68e6bfc7e961b10b6da5022490e2488b5ae85679cae0be6b33c6.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/continuous_delivery_4_en"> 🇬🇧 Statical Code Analysis with SonarQube and deployment to Kubernetes et al. with Jenkins Pipelines</a></td>
   </tr>
   <tr>
@@ -53,7 +53,7 @@ The examples were developed while working on an article series called *Coding Co
     <td colspan="2">02/2021 (covering example on branch 12, also explains how to do GitOps with Jenkins. See also <a href="https://github.com/cloudogu/gitops-build-lib">GitOps Build Lib</a> and <a href="https://github.com/cloudogu/k8s-gitops-playground">GitOps Playground</a>.)</td>
   </tr>
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2021/Coding_CD_5_150x150-6e42097ba21ca33a27b60eed66daf94240fab30b29f1d33574bc487d8fca064d.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2021/Coding_CD_5_150x150-80be4476c0dfdb5df094def33372802979288818fc82f74ea27985f34d0a5508137b230e8c7d0a7bca7c2eddfa6ca8f80e4bee4650dc02d1d162a199cf3ad526.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/ciops-vs-gitops_en"> 🇬🇧 CIOps vs. GitOps with Jenkins</a></td>
   </tr>
   <tr>
